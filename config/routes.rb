@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get 'authenticate/login'
+
+  get 'authenticate/logout'
+
   resources :assignments
   resources :grades
   # The priority is based upon order of creation: first created -> highest priority.
