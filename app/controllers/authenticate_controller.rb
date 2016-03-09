@@ -1,10 +1,20 @@
 class AuthenticateController < ApplicationController
   def login
     if request.post?
-      user = Teacher.find_by(email: params[:email]) || Student.find_by(email: params[:email]) || Parent.find_by(email: params[:email])
+      if Teacher.find_by(email: params[:email])
+        user = Teacher.find_by(email: params[:email])
+      elsif Student.find_by(email: params[:email])
+        user = Student.find_by(email: params[:email])
+      elsif Parent.find_by(email: params[:email])
+        user = Parent.find_by(email: params[:email])
+      else
+        flash[:notice] = "User name not found!"
+      end
+
       if user && user.authenticate(params[:password])
         session[:user_id] = user.id
-        user.find_by(email: params[:email])
+        # user.find_by(email: params[:email])
+        redirect_to assignments_path
         flash[:notice] = "You successfully logged in!"
       else
         flash[:notice] = "Wrong password. Please try again."
