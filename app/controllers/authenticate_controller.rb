@@ -1,14 +1,10 @@
 class AuthenticateController < ApplicationController
   def login
     if request.post?
-      if Teacher.find_by(email: params[:email])
-        user = Teacher.find_by(email: params[:email])
-      elsif Student.find_by(email: params[:email])
-        user = Student.find_by(email: params[:email])
-      elsif Parent.find_by(email: params[:email])
-        user = Parent.find_by(email: params[:email])
+      unless params[:user_type].nil?
+        user = params[:user_type].constantize
       else
-        flash[:notice] = "User name not found!"
+        flash[:notice] = "Incorrect user name and password"
       end
 
       if user && user.authenticate(params[:password])
